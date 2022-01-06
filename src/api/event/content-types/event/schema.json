@@ -17,7 +17,8 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "name"
+      "targetField": "name",
+      "required": false
     },
     "venue": {
       "type": "string"
@@ -25,11 +26,8 @@
     "address": {
       "type": "string"
     },
-    "data": {
-      "type": "datetime"
-    },
-    "time": {
-      "type": "string"
+    "date": {
+      "type": "date"
     },
     "performers": {
       "type": "string"
@@ -52,6 +50,9 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "events"
+    },
+    "time": {
+      "type": "string"
     }
   }
 }

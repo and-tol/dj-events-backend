@@ -5,6 +5,7 @@
   "description": "A Strapi application",
   "scripts": {
     "develop": "strapi develop",
+    "develop:watch": "strapi develop --watch-admin",
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi"
@@ -14,6 +15,7 @@
     "@strapi/plugin-users-permissions": "4.0.2",
     "@strapi/provider-upload-cloudinary": "^4.0.2",
     "@strapi/strapi": "4.0.2",
+    "slugify": "^1.6.4",
     "sqlite3": "5.0.2"
   },
   "author": {
