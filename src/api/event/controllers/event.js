@@ -6,7 +6,6 @@
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-// module.exports = createCoreController('api::event.event');
 module.exports = createCoreController('api::event.event', ({ strapi }) => ({
   async exampleAction(ctx) {
     try {
@@ -18,10 +17,6 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
 
   async me(ctx) {
     const user = ctx.state.user;
-    console.log('>> request received >>');
-    console.log('ctx user >', user);
-    console.log('ctx >>>>', ctx);
-    console.log('ctx.request.body >>', ctx.request.body);
 
     if (!user) {
       return ctx.badRequest(null, [
@@ -29,13 +24,18 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
       ]);
     }
 
-    const data = await strapi.services.event.find({ user: user.id });
+    ctx.query = {
+      ...ctx.query,
+      filters: { ...ctx.query.filters, user: user.id },
+    };
+
+    // Calling the default core action
+    const { data, meta } = await super.find(ctx);
 
     if (!data) {
-      return ctx.notFound();
+      return ctx.notFound()
     }
 
-    // return sanitizeEntity(data, { model: strapi.models.event });
-    return { data };
+    return { data, meta };
   },
 }));
