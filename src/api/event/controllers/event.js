@@ -7,7 +7,7 @@
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::event.event', ({ strapi }) => ({
-  // User Create new event
+  // Create event with linked user
   async create(ctx) {
     try {
       // ctx.body = 'ok';
@@ -16,26 +16,32 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
       if (ctx.is('multipart')) {
         // Calling the default core action
         const { data, meta, files } = await super.find(ctx);
-        data.user = ctx.state.user;
+        data.user = ctx.state.user.id;
 
         // ! This is code not work because has new API
         // entity = await strapi.services.event.create(data, { files })
-        entity = await strapi
-          .service('api::event.event')
-          .create(data, { files });
+        // entity = await strapi
+        //   .service('api::event.event')
+        //   .create(data, { files });
+        entity = await strapi.entityService.create(
+          'api::event.event',
+          {
+            data: ctx.request.body,
+          },
+          { files }
+        );
       } else {
-        ctx.request.body.user = ctx.state.user.id;
+        // ctx.request.body.user = ctx.state.user.id;
 
         ctx = { ...ctx, body: ctx.request.body };
+        console.log('>>>> create >>>', ctx.request.body.data);
 
-        console.log('create >>>', ctx.request.body);
-
-        entity = await strapi.entityService.create('api::event.event', id, {
-          data: ctx.request.body,
+        entity = await strapi.entityService.create('api::event.event', {
+          data: ctx.request.body.data
         });
-
       }
       const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+      console.log('>>>> entity >>>', sanitizedEntity);
 
       // console.log('>>> create sanitizedEntity >>>', sanitizedEntity);
 
@@ -50,8 +56,8 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
     try {
       // Получаем пользователя (user)
       const user = ctx.state.user;
-      // Получаем id события, которое нужно удалить
-      const { id } = ctx.params;
+      // Получаем id события, которое нужно редактировать
+      // const { id } = ctx.params;
       let entity;
 
       // Получаем событие юзера
