@@ -8,7 +8,7 @@
 const { createCoreController } = require('@strapi/strapi').factories;
 // const modelUid = "api::event.event"
 
-// Get logged in users
+
 module.exports = createCoreController('api::event.event', ({ strapi }) => ({
   async exampleAction(ctx) {
     try {
@@ -44,6 +44,7 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
   //   return { data };
   // },
 
+  // Get logged in users
   async me(ctx) {
     const user = ctx.state.user;
 
