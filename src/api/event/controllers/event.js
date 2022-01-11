@@ -37,13 +37,11 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
         console.log('>>>> create >>>', ctx.request.body.data);
 
         entity = await strapi.entityService.create('api::event.event', {
-          data: ctx.request.body.data
+          data: { ...ctx.request.body.data },
+          populate: '*',
         });
       }
       const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
-      console.log('>>>> entity >>>', sanitizedEntity);
-
-      // console.log('>>> create sanitizedEntity >>>', sanitizedEntity);
 
       return this.transformResponse(sanitizedEntity);
     } catch (err) {
